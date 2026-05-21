@@ -1,54 +1,22 @@
-# Customer Onboarding — Reference Solution
+# Technical Assessment — Reference Solutions
 
-Reference build for the 1-hour CS/.NET/React developer technical assessment.
+This repository contains reference solutions for two separate developer technical assessments, both in `./test/`.
 
-## Stack
-- **Backend:** .NET 10 Web API, EF Core 10 + SQLite, MediatR, FluentValidation, AutoMapper, Serilog
-- **Frontend:** Vite + React 18 + TypeScript, raw HTML canvas signature pad
-- **Tests:** xUnit + Moq + FluentAssertions
+## Projects
 
-## Architecture
-Five-project solution with one-way dependencies and a framework-free Domain:
+### Customer Onboarding (`src/` + `frontend/`)
+.NET 10 + EF Core SQLite backend with a Vite/React frontend featuring a canvas signature pad. Satisfies `test/Development-Assessment-CS-DotNet-React-2026-02.md`.
 
-```
-src/
-  Api/             ASP.NET controllers, middleware, DI composition root
-  Application/     MediatR handlers, DTOs, validators, Result<T>
-  Domain/          Entity + repository interface (zero NuGet deps)
-  Infrastructure/  EF Core DbContext, repository, unit of work
-  Tests/           xUnit handler/validator tests
-frontend/          Vite + React UI
-```
+- Run backend: `cd src/Api && dotnet run` (http://localhost:5000)
+- Run frontend: `cd frontend && npm install && npm run dev` (http://localhost:5173)
+- Test: `dotnet test`
+- Design: [docs/superpowers/specs/2026-05-21-customer-onboarding-system-design.md](docs/superpowers/specs/2026-05-21-customer-onboarding-system-design.md)
 
-See [docs/superpowers/specs/2026-05-21-customer-onboarding-system-design.md](docs/superpowers/specs/2026-05-21-customer-onboarding-system-design.md) for full design rationale.
+### Coffee Machine API (`coffee-machine/`)
+.NET 10 Minimal API satisfying `test/Developer Technical Test..docx`. Single endpoint `GET /brew-coffee` with three behaviors (200/503/418).
 
-## Run
+- Run: `cd coffee-machine && dotnet run --project src/Api` (http://localhost:5050)
+- Test: `cd coffee-machine && dotnet test`
+- Design: [docs/superpowers/specs/2026-05-22-coffee-machine-api-design.md](docs/superpowers/specs/2026-05-22-coffee-machine-api-design.md)
 
-### Backend
-```bash
-cd src/Api
-dotnet run
-# API: http://localhost:5000   Swagger: http://localhost:5000/swagger
-```
-SQLite database (`customers.db`) is created automatically on first run.
-
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-# UI: http://localhost:5173
-```
-
-### Tests
-```bash
-dotnet test
-```
-
-## API
-
-| Method | Path | Body | Success |
-|---|---|---|---|
-| POST | /api/customers | CreateCustomerRequest | 201 + CustomerDto |
-| GET | /api/customers/{id} | — | 200 + CustomerDto |
-| GET | /api/customers | — | 200 + CustomerDto[] |
+The .docx assessment also has an "Extra Credit" weather-aware variant; that will live on the branch `feat/coffee-weather`.
