@@ -1,6 +1,6 @@
-# Technical Assessment — Reference Solutions
+# Technical Assessment
 
-This repository contains reference solutions for two separate developer technical assessments, both in `./test/`.
+This repository contains solutions for two separate developer technical assessments, both in `./test/`.
 
 ## Projects
 
