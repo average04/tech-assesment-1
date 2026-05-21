@@ -1,5 +1,6 @@
 using CoffeeMachine.Api.Models;
 using CoffeeMachine.Api.Services;
+using CoffeeMachine.Api.Services.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,11 +8,18 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<IBrewCounter, BrewCounter>();
 builder.Services.AddSingleton<IBrewService, BrewService>();
 
+builder.Services
+    .AddOptions<WeatherOptions>()
+    .Bind(builder.Configuration.GetSection(WeatherOptions.SectionName));
+
+builder.Services.AddHttpClient<IWeatherService, OpenWeatherMapWeatherService>();
+
 var app = builder.Build();
 
-app.MapGet("/brew-coffee", (IBrewService brewService) =>
+app.MapGet("/brew-coffee", async (IBrewService brewService, IWeatherService weather, CancellationToken ct) =>
 {
-    var outcome = brewService.Brew();
+    var temperatureC = await weather.GetCurrentTemperatureCelsiusAsync(ct);
+    var outcome = brewService.Brew(temperatureC);
     return outcome switch
     {
         BrewOutcome.Ready ready => Results.Ok(ready.Response),
