@@ -1,0 +1,23 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.db
+*.db-shm
+*.db-wal
+logs/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Editor
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
