@@ -5,6 +5,8 @@ namespace CoffeeMachine.Api.Services;
 public sealed class BrewService : IBrewService
 {
     private const string HotMessage = "Your piping hot coffee is ready";
+    private const string IcedMessage = "Your refreshing iced coffee is ready";
+    private const double IcedThresholdCelsius = 30.0;
 
     private readonly TimeProvider _time;
     private readonly IBrewCounter _counter;
@@ -15,7 +17,7 @@ public sealed class BrewService : IBrewService
         _counter = counter;
     }
 
-    public BrewOutcome Brew()
+    public BrewOutcome Brew(double? currentTemperatureCelsius = null)
     {
         var callNumber = _counter.Next();
         var now = _time.GetLocalNow();
@@ -30,6 +32,10 @@ public sealed class BrewService : IBrewService
             return BrewOutcome.OutOfCoffee.Instance;
         }
 
-        return new BrewOutcome.Ready(new BrewResponse(HotMessage, now));
+        var message = currentTemperatureCelsius is { } c && c > IcedThresholdCelsius
+            ? IcedMessage
+            : HotMessage;
+
+        return new BrewOutcome.Ready(new BrewResponse(message, now));
     }
 }

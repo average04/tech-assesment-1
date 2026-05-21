@@ -4,5 +4,5 @@ namespace CoffeeMachine.Api.Services;
 
 public interface IBrewService
 {
-    BrewOutcome Brew();
+    BrewOutcome Brew(double? currentTemperatureCelsius = null);
 }
